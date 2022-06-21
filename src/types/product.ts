@@ -1,0 +1,33 @@
+export default interface Product {
+    webshopId: number,
+    hqId: number,
+    title: string,
+    salesUnitSize: string,
+    images: [
+        width: number,
+        height: number,
+        url: string
+    ],
+    priceBeforeBonus: number,
+    currentPrice: number,
+    orderAvailabilityStatus: string,
+    mainCategory: string,
+    subCategory: string,
+    brand: string,
+    shopType: string,
+    availableOnline: boolean,
+    isPreviouslyBought: boolean,
+    descriptionHighlights: string,
+    propertyIcons: [string],
+    nutriscore: string,
+    nix18: boolean,
+    isStapelBonus: boolean,
+    extraDescriptiona: [string],
+    isBonus: boolean,
+    descriptionFull: string,
+    isOrderable: true,
+    isInfiniteBonus: boolean,
+    isSample: boolean,
+    isSponsored: boolean,
+    isVirtualBundle: boolean
+}
