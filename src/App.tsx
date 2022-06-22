@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import './App.css';
-import ProductCard from './components/ProductCard';
-import productService from "./services/product";
-import ProductRes from "./types/requestProduct";
-import Product from "./types/product";
-import SearchIcon from "./assets/search-icon.svg";
+import { useEffect, useState } from 'react';
+import { Routes, Route } from "react-router-dom"
+import { Navbar } from './components/Navbar';
+import { Home } from "./pages/Home";
+import { About } from "./pages/About";
+import { Container } from "react-bootstrap";
+import { ShoppingCartProvider } from "./context/ShoppingCartContext";
+import ProductRes from './types/requestProduct';
+import productService from './services/product';
 
 function App() {
 
-  const [productRes, setProductRes] = useState<ProductRes>()
+  //@ts-ignore
+  const [productRes, setProductRes] = useState<ProductRes>({})
   const [searchValue, setSearchValue] = useState<string>("")
   
   const handleChange = (e: any) => {
@@ -17,6 +20,8 @@ function App() {
   }
 
   const searchProduct = (search: string) => {
+    console.log(search);
+    
     productService.getProducts(search)
       .then((res: ProductRes) => {
         setProductRes(res);
@@ -27,28 +32,20 @@ function App() {
     const timeoutId = setTimeout(() => searchProduct(searchValue), 300);
     return () => clearTimeout(timeoutId);
     
-  }, [searchValue]);
+  }, [searchValue]);  
 
 
   return (
-    <div className="App">
-        {/* <input type="text" onChange={handleChange} id="search" /> */}
-        <div className="wrap">
-          <div className="search">
-            <input type="text" className="searchTerm" onChange={handleChange} value={searchValue} placeholder="Kwark..."/>
-            <button type="submit" className="searchButton">
-              <img src={SearchIcon} alt="search icon"/>
-            </button>
-          </div>
-        </div>
-        <div className='products-list'>
-          {productRes && 
-            productRes?.products.map((product: Product) => (
-              <ProductCard product={product}/>
-            ))
-          }
-        </div>
-    </div>
+    //@ts-ignore
+    <ShoppingCartProvider products={productRes?.products}>
+      <Navbar handleSearch={handleChange} />
+      <Container className="mb-4">
+        <Routes>
+          <Route path="/" element={<Home products={productRes?.products} />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </Container>
+    </ShoppingCartProvider>
   );
 }
 
